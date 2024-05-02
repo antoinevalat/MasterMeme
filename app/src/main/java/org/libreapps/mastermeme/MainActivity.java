@@ -1,6 +1,9 @@
 package org.libreapps.mastermeme;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,20 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        // Récupérer le bouton "Créer un jeu"
+        Button buttonCreerJeu = findViewById(R.id.button_creerjeu);
+
+        // Ajouter un écouteur de clic au bouton "Créer un jeu"
+        buttonCreerJeu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour ouvrir CreerJeu
+                Intent intent = new Intent(MainActivity.this, CreerJeu.class);
+                // Démarrer CreerJeu
+                startActivity(intent);
+            }
         });
     }
 }
