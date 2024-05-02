@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreerJeu">
+
+    <TextView
+        android:id="@+id/txtTitreCreer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Création de votre partie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtNbRounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:text="Choisissez votre nombre de rounds :"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitreCreer" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRd6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="6 Rounds"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNbRounds" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRd12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="12 Rounds"
+        app:layout_constraintEnd_toEndOf="@+id/checkBoxRd6"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxRd6"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxRd6" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRd18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="18 Rounds"
+        app:layout_constraintEnd_toEndOf="@+id/checkBoxRd12"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxRd12"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxRd12" />
+
+    <TextView
+        android:id="@+id/txtGenererCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voici votre code à partager à vos amis :"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="426dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
