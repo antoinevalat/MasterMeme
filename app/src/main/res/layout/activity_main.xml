@@ -11,46 +11,43 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:scaleX="3"
         android:scaleY="3"
         android:text="MEME MASTER"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_creerjeu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="50dp"
         android:text="Créer un jeu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/editEntrezNom"
+        app:layout_constraintStart_toStartOf="@+id/editEntrezNom"
+        app:layout_constraintTop_toBottomOf="@+id/editEntrezNom" />
 
     <Button
         android:id="@+id/button_rejoindre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="40dp"
         android:text="Rejoindre un jeu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_creerjeu"
+        app:layout_constraintStart_toStartOf="@+id/button_creerjeu"
         app:layout_constraintTop_toBottomOf="@+id/button_creerjeu" />
 
     <Button
         android:id="@+id/button_regles"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
         android:text="Règles du jeu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_rejoindre"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button_rejoindre"
         app:layout_constraintTop_toBottomOf="@+id/button_rejoindre" />
 
     <Button
@@ -60,5 +57,27 @@
         android:text="A propos"
         tools:layout_editor_absoluteX="289dp"
         tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/editEntrezNom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Entre ton blaze là"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtEntrezNom"
+        app:layout_constraintStart_toStartOf="@+id/txtEntrezNom"
+        app:layout_constraintTop_toBottomOf="@+id/txtEntrezNom" />
+
+    <TextView
+        android:id="@+id/txtEntrezNom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Entrez votre nom :"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
