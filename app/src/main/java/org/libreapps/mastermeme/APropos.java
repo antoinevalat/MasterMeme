@@ -1,6 +1,9 @@
 package org.libreapps.mastermeme;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +23,17 @@ public class APropos extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button buttonRetour = findViewById(R.id.button_retour);
+        buttonRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour revenir à MainActivity
+                Intent intent = new Intent(APropos.this, MainActivity.class);
+                // Démarrer MainActivity
+                startActivity(intent);
+            }
+        });
+
     }
 }

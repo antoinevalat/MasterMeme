@@ -2,19 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/bleu_fonce">
+
+    <!-- Vos autres vues ici -->
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtMEME"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="150dp"
         android:scaleX="3"
         android:scaleY="3"
-        android:text="MEME MASTER"
+        android:text="MEME"
+        android:textColor="#ed008a"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,9 +57,11 @@
         android:id="@+id/button_apropos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="A propos"
-        tools:layout_editor_absoluteX="289dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editEntrezNom"
@@ -64,6 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:textColor="#FFFFFFFF"
+        android:textColorHint="#F0F0F2"
         android:hint="Entre ton blaze là"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="@+id/txtEntrezNom"
@@ -74,10 +81,23 @@
         android:id="@+id/txtEntrezNom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
+        android:textColor="#FFFFFFFF"
         android:text="Entrez votre nom :"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/txtMASTER"
+        app:layout_constraintStart_toStartOf="@+id/txtMASTER"
+        app:layout_constraintTop_toBottomOf="@+id/txtMASTER" />
+
+    <TextView
+        android:id="@+id/txtMASTER"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="26sp"
+        android:text="MASTER"
+        android:textColor="#DA70D6"
+        app:layout_constraintEnd_toEndOf="@+id/txtMEME"
+        app:layout_constraintStart_toStartOf="@+id/txtMEME"
+        app:layout_constraintTop_toBottomOf="@+id/txtMEME" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

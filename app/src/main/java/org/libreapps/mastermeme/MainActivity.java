@@ -37,5 +37,50 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Récupérer le bouton "Rejoindre un jeu"
+        Button buttonRejoindreJeu = findViewById(R.id.button_rejoindre);
+
+        // Ajouter un écouteur de clic au bouton "Rejoindre un jeu"
+        buttonRejoindreJeu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour ouvrir RejoindreJeu
+                Intent intent = new Intent(MainActivity.this, RejoindreJeu.class);
+                // Démarrer RejoindreJeu
+                startActivity(intent);
+            }
+        });
+
+
+        // Récupérer le bouton "À propos"
+        Button buttonAPropos = findViewById(R.id.button_apropos);
+        // Ajouter un écouteur de clic au bouton "À propos"
+        buttonAPropos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour ouvrir APropos
+                Intent intent = new Intent(MainActivity.this, APropos.class);
+                // Démarrer APropos
+                startActivity(intent);
+            }
+        });
+
+        // Récupérer le bouton "À propos"
+        //Button buttonAPropos = findViewById(R.id.button_apropos);
+
+        // Ajouter un écouteur de clic au bouton "À propos"
+        buttonAPropos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour ouvrir APropos
+                Intent intent = new Intent(MainActivity.this, APropos.class);
+                // Démarrer APropos
+                startActivity(intent);
+            }
+        });
+
+
+
     }
 }
