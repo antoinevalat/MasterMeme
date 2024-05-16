@@ -7,7 +7,6 @@
     tools:context=".MainActivity"
     android:background="@color/bleu_fonce">
 
-    <!-- Vos autres vues ici -->
 
     <TextView
         android:id="@+id/txtMEME"
@@ -68,24 +67,14 @@
         android:id="@+id/editEntrezNom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="65dp"
         android:ems="10"
+        android:hint="Entrez votre nom ici"
+        android:inputType="text"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#F0F0F2"
-        android:hint="Entre ton blaze là"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@+id/txtEntrezNom"
-        app:layout_constraintStart_toStartOf="@+id/txtEntrezNom"
-        app:layout_constraintTop_toBottomOf="@+id/txtEntrezNom" />
-
-    <TextView
-        android:id="@+id/txtEntrezNom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:textColor="#FFFFFFFF"
-        android:text="Entrez votre nom :"
         app:layout_constraintEnd_toEndOf="@+id/txtMASTER"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/txtMASTER"
         app:layout_constraintTop_toBottomOf="@+id/txtMASTER" />
 
