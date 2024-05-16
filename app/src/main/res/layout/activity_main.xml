@@ -14,11 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:scaleX="3"
-        android:scaleY="3"
-        android:text="MEME"
         android:fontFamily="@font/policegras"
+        android:text="MEME"
         android:textColor="#ed008a"
+        android:textSize="70sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Créer un jeu"
+        android:fontFamily="@font/policetexte"
         app:layout_constraintEnd_toEndOf="@+id/editEntrezNom"
         app:layout_constraintStart_toStartOf="@+id/editEntrezNom"
         app:layout_constraintTop_toBottomOf="@+id/editEntrezNom" />
@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Rejoindre un jeu"
+        android:fontFamily="@font/policetexte"
         app:layout_constraintEnd_toEndOf="@+id/button_creerjeu"
         app:layout_constraintStart_toStartOf="@+id/button_creerjeu"
         app:layout_constraintTop_toBottomOf="@+id/button_creerjeu" />
@@ -49,6 +50,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="40dp"
         android:text="Règles du jeu"
+        android:fontFamily="@font/policetexte"
         app:layout_constraintEnd_toEndOf="@+id/button_rejoindre"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/button_rejoindre"
@@ -61,6 +63,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="A propos"
+        android:fontFamily="@font/policetexte"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,12 +96,12 @@
         android:id="@+id/txtMASTER"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textSize="26sp"
-        android:text="MASTER"
         android:fontFamily="@font/policegras"
+        android:text="MASTER"
         android:textColor="#DA70D6"
+        android:textSize="53sp"
         app:layout_constraintEnd_toEndOf="@+id/txtMEME"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="@+id/txtMEME"
         app:layout_constraintTop_toBottomOf="@+id/txtMEME" />
 
