@@ -62,5 +62,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Récupérer le bouton "Règles du jeu"
+        Button buttonReglesJeu = findViewById(R.id.button_regles);
+        // Ajouter un écouteur de clic au bouton "Règles du jeu"
+        buttonReglesJeu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Créer une intention pour ouvrir ReglesJeu
+                Intent intent = new Intent(MainActivity.this, ReglesJeu.class);
+                // Démarrer ReglesJeu
+                startActivity(intent);
+            }
+        });
     }
 }
