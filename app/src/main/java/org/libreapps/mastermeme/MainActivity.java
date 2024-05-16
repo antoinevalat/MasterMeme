@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Récupérer le bouton "Créer un jeu"
         Button buttonCreerJeu = findViewById(R.id.button_creerjeu);
-
         // Ajouter un écouteur de clic au bouton "Créer un jeu"
         buttonCreerJeu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Récupérer le bouton "Rejoindre un jeu"
         Button buttonRejoindreJeu = findViewById(R.id.button_rejoindre);
-
         // Ajouter un écouteur de clic au bouton "Rejoindre un jeu"
         buttonRejoindreJeu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         // Récupérer le bouton "À propos"
         Button buttonAPropos = findViewById(R.id.button_apropos);
@@ -65,22 +62,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Récupérer le bouton "À propos"
-        //Button buttonAPropos = findViewById(R.id.button_apropos);
-
-        // Ajouter un écouteur de clic au bouton "À propos"
-        buttonAPropos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Créer une intention pour ouvrir APropos
-                Intent intent = new Intent(MainActivity.this, APropos.class);
-                // Démarrer APropos
-                startActivity(intent);
-            }
-        });
-
-
-
     }
 }
