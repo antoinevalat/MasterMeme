@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReglesJeu">
+    tools:context=".ReglesJeu"
+    android:background="@color/bleu_fonce">
 
     <TextView
         android:id="@+id/txtTitreRegles"
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="Voici les règles du jeu"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="Bienvenue dans MemeMaster !"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitreRegles" />
@@ -35,6 +38,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="40dp"
         android:text="Chaque partie se déroule avec au moins 3 joueurs. A chaque partie, un des joueurs est tiré au hasard pour être le juge du tour qui va être joué. Puis une phrase de contexte va être donnée aux joueurs et ils vont devoir y attribuer leur meme qui leur semble le plus adapté. A la fin du tour, le joueur qui avait été sélectionné comme le juge désigne qui est le vainqueur. Puis au tour suivant c'est un autre joueur qui devient juge du tour."
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRegles1" />

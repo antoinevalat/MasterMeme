@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".APropos">
+    tools:context=".APropos"
+    android:background="@color/bleu_fonce">
+
 
     <TextView
         android:id="@+id/txtTitreAPropos"
@@ -13,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="A propos"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="METTRE TEXTE"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitreAPropos" />

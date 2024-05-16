@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreerJeu">
+    tools:context=".CreerJeu"
+    android:background="@color/bleu_fonce">
 
     <TextView
         android:id="@+id/txtTitreCreer"
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="Création de votre partie"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,45 +25,51 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
         android:text="Choisissez votre nombre de rounds :"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitreCreer" />
 
-    <CheckBox
-        android:id="@+id/checkBoxRd6"
+    <RadioGroup
+        android:id="@+id/radioGroupRounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="6 Rounds"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNbRounds" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNbRounds">
 
-    <CheckBox
-        android:id="@+id/checkBoxRd12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="12 Rounds"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxRd6"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxRd6"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxRd6" />
+        <RadioButton
+            android:id="@+id/radioButtonRd6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6 Rounds"
+            android:textColor="#FFFFFFFF" />
 
-    <CheckBox
-        android:id="@+id/checkBoxRd18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="18 Rounds"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxRd12"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxRd12"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxRd12" />
+        <RadioButton
+            android:id="@+id/radioButtonRd12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="12 Rounds"
+            android:textColor="#FFFFFFFF" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRd18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="18 Rounds"
+            android:textColor="#FFFFFFFF" />
+
+    </RadioGroup>
 
     <TextView
         android:id="@+id/txtGenererCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voici votre code à partager à vos amis :"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="426dp" />
@@ -72,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Mettre code aléatoire"
+        android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtGenererCode" />
@@ -85,6 +94,5 @@
         android:text="Retour"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
