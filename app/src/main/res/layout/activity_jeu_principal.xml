@@ -1,49 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- activity_jeu_principal.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:orientation="vertical"
     tools:context=".JeuPrincipal">
 
     <TextView
         android:id="@+id/txtSituationDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description de la situation"
+        android:text="Description"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:padding="16dp"/>
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/txtSituationDescription"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/placeholder_image"
-        android:scaleType="fitCenter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
 
     <Button
         android:id="@+id/btnSelectMeme1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageView1"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="Select"/>
+        android:text="Select Meme 1"
+        android:layout_margin="8dp"/>
 
-    <!-- Ajoutez les ImageView et les boutons pour les autres memes -->
+    <Button
+        android:id="@+id/btnSelectMeme2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Meme 2"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/btnSelectMeme3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Meme 3"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/btnSelectMeme4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Meme 4"
+        android:layout_margin="8dp"/>
 
     <Button
         android:id="@+id/btnNextRound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageView4"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:text="Round Suivant"/>
-</RelativeLayout>
+        android:text="Next Round"
+        android:layout_margin="16dp"/>
+</LinearLayout>

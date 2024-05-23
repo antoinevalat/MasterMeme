@@ -1,4 +1,5 @@
 package org.libreapps.mastermeme;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,10 +72,10 @@ public class JeuPrincipal extends AppCompatActivity {
 
     private void initializeMemesList() {
         memesList = new ArrayList<>();
-        // Ajoutez les chemins d'accès aux images des memes à la liste
-        memesList.add("path/to/meme1.jpg");
-        memesList.add("path/to/meme2.jpg");
-        memesList.add("path/to/meme3.jpg");
+        // Ajoutez les ressources d'images des memes à la liste
+        memesList.add(String.valueOf(R.drawable.meme1));
+        memesList.add(String.valueOf(R.drawable.meme2));
+        memesList.add(String.valueOf(R.drawable.meme3));
         // Ajoutez d'autres memes si nécessaire
     }
 
@@ -114,11 +115,8 @@ public class JeuPrincipal extends AppCompatActivity {
 
     private void displaySelectedMemes() {
         for (int i = 0; i < 4; i++) {
-            // Affichez les memes sélectionnés sur la page
-            // Vous devez charger les images depuis les chemins d'accès
-            // Utilisez une bibliothèque comme Picasso ou Glide pour le chargement d'images à partir des URL
-            // Par exemple:
-            // Picasso.get().load(selectedMemes.get(i)).into(memeImageViews[i]);
+            int resId = Integer.parseInt(selectedMemes.get(i));
+            memeImageViews[i].setImageResource(resId);
         }
     }
 
@@ -138,5 +136,4 @@ public class JeuPrincipal extends AppCompatActivity {
 
     private void displayFinalScores() {
         // Affichez les scores finaux des joueurs
-    }
-}
+    }}
