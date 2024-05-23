@@ -2,3 +2,4 @@
 plugins {
 alias(libs.plugins.androidApplication) apply false
 }
+apply plugin: 'com.android.application'

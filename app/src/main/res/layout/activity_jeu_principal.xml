@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".JeuPrincipal">
+
+    <TextView
+        android:id="@+id/txtSituationDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description de la situation"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"/>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/txtSituationDescription"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/placeholder_image"
+        android:scaleType="fitCenter"/>
+
+    <Button
+        android:id="@+id/btnSelectMeme1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView1"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:text="Select"/>
+
+    <!-- Ajoutez les ImageView et les boutons pour les autres memes -->
+
+    <Button
+        android:id="@+id/btnNextRound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView4"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="Round Suivant"/>
+</RelativeLayout>

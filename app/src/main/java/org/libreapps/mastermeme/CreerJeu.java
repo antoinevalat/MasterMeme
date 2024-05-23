@@ -16,8 +16,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 
 public class CreerJeu extends AppCompatActivity {
+    private String codePartie;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -26,6 +28,19 @@ public class CreerJeu extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+
+        });
+        Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
+        buttonCreerPartie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Générer un code de partie unique (vous pouvez utiliser une fonction pour cela)
+                codePartie = generateUniqueCode();
+                // Enregistrer le code de la partie dans SharedPreferences ou une base de données
+                saveCodePartie(codePartie);
+                // Rediriger vers l'activité principale du jeu
+                redirectToMainActivity();
+            }
         });
 
         Button buttonRetour = findViewById(R.id.button_retour);
@@ -67,5 +82,21 @@ public class CreerJeu extends AppCompatActivity {
         });
         */
 
+    }
+    private String generateUniqueCode() {
+        // Implémentez votre logique pour générer un code unique
+        // Par exemple, vous pouvez utiliser une combinaison aléatoire de chiffres et de lettres
+        return "ABC123"; // Code de test
+    }
+
+    private void saveCodePartie(String code) {
+        // Utilisez SharedPreferences ou une base de données pour enregistrer le code de la partie
+    }
+
+    private void redirectToMainActivity() {
+        // Rediriger vers l'activité principale du jeu
+        Intent intent = new Intent(CreerJeu.this, MainActivity.class);
+        startActivity(intent);
+        finish(); // Facultatif : pour fermer l'activité actuelle après la redirection
     }
 }
