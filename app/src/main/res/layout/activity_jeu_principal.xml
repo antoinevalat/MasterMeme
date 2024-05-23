@@ -16,12 +16,6 @@
         android:padding="16dp"/>
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"/>
-
-    <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,8 +37,14 @@
         android:id="@+id/btnSelectMeme1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Meme 1"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:text="Select Meme 1" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
 
     <Button
         android:id="@+id/btnSelectMeme2"

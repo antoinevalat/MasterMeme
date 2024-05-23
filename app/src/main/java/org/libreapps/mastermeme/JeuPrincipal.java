@@ -76,6 +76,7 @@ public class JeuPrincipal extends AppCompatActivity {
         memesList.add(String.valueOf(R.drawable.meme1));
         memesList.add(String.valueOf(R.drawable.meme2));
         memesList.add(String.valueOf(R.drawable.meme3));
+        memesList.add(String.valueOf(R.drawable.meme4));
         // Ajoutez d'autres memes si nécessaire
     }
 
