@@ -81,11 +81,17 @@ public class JeuPrincipal extends AppCompatActivity {
 
     private void initializeSituationDescriptions() {
         situationDescriptions = new ArrayList<>();
-        // Ajoutez les descriptions de situations à la liste
-        situationDescriptions.add("Description 1");
-        situationDescriptions.add("Description 2");
-        situationDescriptions.add("Description 3");
-        // Ajoutez d'autres descriptions si nécessaire
+        situationDescriptions.add("Quant tu ouvres une carte d'anniversaire de ta mamie et de l'argent en tombe");
+        situationDescriptions.add("Quand tu réalises que le son que tu sautes d'habitude est en fait un banger");
+        situationDescriptions.add("Quand le cours est sur le point de se terminer et quelqu'un pose une question");
+        situationDescriptions.add("Quand tu retournes ton oreiller sur le côté froid");
+        situationDescriptions.add("Quand tu croyais avoir 4$ dans ton compte en banque mais que tu en as 30");
+        situationDescriptions.add("Quand tu réalises que tu as oublié d'étudier pour l'examen demain matin.");
+        situationDescriptions.add("Quand c'est la 5ième fois qu'on te répète qqc et que tu fais semblant d'avoir compris");
+        situationDescriptions.add("Quand tu te réveilles et réalises que c'est encore le week-end.");
+        situationDescriptions.add("Quand tu vois les prix des billets d'avion pour tes vacances");
+        situationDescriptions.add("Quand tu cherches tes clés de voiture et que tu les trouves dans le frigo.");
+
     }
 
     private void startRound() {
