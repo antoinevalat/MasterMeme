@@ -1,76 +1,111 @@
-<!-- activity_jeu_principal.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".JeuPrincipal">
 
+    <!-- TextView pour afficher la description de la situation -->
     <TextView
         android:id="@+id/txtSituationDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="19sp"
-        android:padding="16dp"/>
+        android:text="Situation Description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <!-- ImageView pour afficher les memes -->
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtSituationDescription"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/txtSituationDescription"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/imageView1"
+        android:layout_marginStart="20dp"/>
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/txtSituationDescription"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/imageView2"
+        android:layout_marginStart="20dp"/>
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/txtSituationDescription"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/imageView3"
+        android:layout_marginStart="20dp"/>
 
+    <!-- Boutons de sélection des memes -->
     <Button
         android:id="@+id/btnSelectMeme1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Select Meme 1" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+        android:text="Select Meme 1"
+        android:layout_below="@id/imageView1"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
 
     <Button
         android:id="@+id/btnSelectMeme2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Meme 2"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/imageView2"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
 
     <Button
         android:id="@+id/btnSelectMeme3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Meme 3"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/imageView3"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
 
     <Button
         android:id="@+id/btnSelectMeme4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Meme 4"
-        android:layout_margin="8dp"/>
+        android:layout_below="@id/imageView4"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"/>
 
+    <!-- Bouton pour le juge de sélectionner le meilleur mème -->
+    <Button
+        android:id="@+id/btnJudgeSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Best Meme"
+        android:layout_below="@id/btnSelectMeme4"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
+
+    <!-- Bouton pour passer au prochain round -->
     <Button
         android:id="@+id/btnNextRound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next Round"
-        android:layout_margin="16dp"/>
-</LinearLayout>
+        android:layout_below="@id/btnJudgeSelect"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
