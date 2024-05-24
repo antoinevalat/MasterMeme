@@ -4,12 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.libreapps.mastermeme.models.User;
+import org.libreapps.mastermeme.network.ApiClient;
+import org.libreapps.mastermeme.network.ApiService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Récupérer les utilisateurs depuis l'API
+        fetchUsers();
 
         // Récupérer le bouton "Créer un jeu"
         Button buttonCreerJeu = findViewById(R.id.button_creerjeu);
@@ -73,6 +87,32 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ReglesJeu.class);
                 // Démarrer ReglesJeu
                 startActivity(intent);
+            }
+        });
+    }
+
+
+    private void fetchUsers() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<List<User>> call = apiService.getUsers();
+
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    List<User> users = response.body();
+                    // Utilisez les données des utilisateurs ici
+                    Toast.makeText(MainActivity.this, "Users fetched successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Gestion des erreurs de la réponse
+                    Toast.makeText(MainActivity.this, "Failed to fetch users", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                // Gestion des erreurs de la requête
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
