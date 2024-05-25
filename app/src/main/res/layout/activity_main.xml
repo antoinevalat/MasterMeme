@@ -7,7 +7,6 @@
     tools:context=".MainActivity"
     android:background="@color/bleu_fonce">
 
-
     <TextView
         android:id="@+id/txtMEME"
         android:layout_width="wrap_content"

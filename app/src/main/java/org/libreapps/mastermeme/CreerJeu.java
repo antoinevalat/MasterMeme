@@ -2,16 +2,11 @@ package org.libreapps.mastermeme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +18,7 @@ public class CreerJeu extends AppCompatActivity {
     private String codePartie;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private int selectedRoundCount = 6; // Par défaut, 6 rounds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,64 +34,45 @@ public class CreerJeu extends AppCompatActivity {
 
         codePartie = generateUniqueCode();
         txtCodeCreer.setText(codePartie);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+/*
+        RadioGroup radioGroupRounds = findViewById(R.id.radioGroupRounds);
+        radioGroupRounds.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.radioButtonRd6:
+                    selectedRoundCount = 6;
+                    break;
+                case R.id.radioButtonRd12:
+                    selectedRoundCount = 12;
+                    break;
+                case R.id.radioButtonRd18:
+                    selectedRoundCount = 18;
+                    break;
+            }
         });
 
+
+ */
         Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
-        buttonCreerPartie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                codePartie = generateUniqueCode();
-                txtCodeCreer.setText(codePartie);
+        buttonCreerPartie.setOnClickListener(v -> {
+            codePartie = generateUniqueCode();
+            txtCodeCreer.setText(codePartie);
 
-                String userId = mAuth.getCurrentUser().getUid();
-                mDatabase.child("parties").child(codePartie).setValue(userId);
+            String userId = mAuth.getCurrentUser().getUid();
+            mDatabase.child("parties").child(codePartie).setValue(userId);
 
-                Intent intent = new Intent(CreerJeu.this, ListeJoueurs.class);
-                intent.putExtra("CODE_PARTIE", codePartie);
-                intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
-                startActivity(intent);
-                finish();
-            }
+            Intent intent = new Intent(CreerJeu.this, ListeJoueurs.class);
+            intent.putExtra("CODE_PARTIE", codePartie);
+            intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
+            intent.putExtra("ROUND_COUNT", selectedRoundCount);
+            startActivity(intent);
+            finish();
         });
 
         Button buttonRetour = findViewById(R.id.button_retour);
-        buttonRetour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreerJeu.this, MainActivity.class);
-                startActivity(intent);
-            }
+        buttonRetour.setOnClickListener(v -> {
+            Intent intent = new Intent(CreerJeu.this, MainActivity.class);
+            startActivity(intent);
         });
-
-        RadioGroup radioGroupRounds = findViewById(R.id.radioGroupRounds);
-        RadioButton radioButtonRd6 = findViewById(R.id.radioButtonRd6);
-        RadioButton radioButtonRd12 = findViewById(R.id.radioButtonRd12);
-        RadioButton radioButtonRd18 = findViewById(R.id.radioButtonRd18);
-
-        /*
-        radioGroupRounds.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.radioButtonRd6:
-                        // Actions pour 6 Rounds sélectionnés
-                        break;
-                    case R.id.radioButtonRd12:
-                        // Actions pour 12 Rounds sélectionnés
-                        break;
-                    case R.id.radioButtonRd18:
-                        // Actions pour 18 Rounds sélectionnés
-                        break;
-                }
-            }
-        });
-
-         */
     }
 
     private String generateUniqueCode() {

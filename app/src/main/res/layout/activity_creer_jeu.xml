@@ -63,8 +63,6 @@
             android:text="18 Rounds"
             android:textColor="#FFFFFFFF" />
 
-
-
     </RadioGroup>
 
     <TextView
@@ -87,7 +85,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtGenererCode" />
-
 
     <Button
         android:id="@+id/button_retour"

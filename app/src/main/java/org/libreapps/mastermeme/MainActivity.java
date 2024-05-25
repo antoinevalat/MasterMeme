@@ -10,19 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.libreapps.mastermeme.models.User;
-import org.libreapps.mastermeme.network.ApiClient;
-import org.libreapps.mastermeme.network.ApiService;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,26 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<List<User>> call = apiService.getUsers();
-
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (response.isSuccessful()) {
-                    List<User> users = response.body();
-                    Toast.makeText(MainActivity.this, "Users fetched successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Failed to fetch users", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Button buttonCreerJeu = findViewById(R.id.button_creerjeu);
         Button buttonRejoindre = findViewById(R.id.button_rejoindre);
@@ -58,20 +32,34 @@ public class MainActivity extends AppCompatActivity {
 
         buttonCreerJeu.setOnClickListener(v -> {
             EditText editEntrezNom = findViewById(R.id.editEntrezNom);
-            String nomUtilisateur = editEntrezNom.getText().toString();
+            String nomUtilisateur = editEntrezNom.getText().toString().trim();
             if (!nomUtilisateur.isEmpty()) {
-                mAuth.createUserWithEmailAndPassword("test@example.com", "password")
-                        .addOnCompleteListener(MainActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                Intent intent = new Intent(MainActivity.this, CreerJeu.class);
-                                intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(MainActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                // Vérifie si l'utilisateur est déjà connecté
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    // Enregistrer le nom de l'utilisateur dans Firebase Database
+                    enregistrerNomUtilisateur(currentUser.getUid(), nomUtilisateur);
+                    // Lancer l'activité pour créer un jeu en passant le nom de l'utilisateur
+                    lancerActiviteCreerJeu(nomUtilisateur);
+                } else {
+                    mAuth.signInAnonymously()
+                            .addOnCompleteListener(MainActivity.this, task -> {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    if (user != null) {
+                                        // Enregistrer le nom de l'utilisateur dans Firebase Database
+                                        enregistrerNomUtilisateur(user.getUid(), nomUtilisateur);
+                                        // Lancer l'activité pour créer un jeu en passant le nom de l'utilisateur
+                                        lancerActiviteCreerJeu(nomUtilisateur);
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Failed to retrieve user.", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Authentication failed.";
+                                    Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             } else {
                 Toast.makeText(MainActivity.this, "Veuillez entrer un nom", Toast.LENGTH_SHORT).show();
             }
@@ -79,11 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
         buttonRejoindre.setOnClickListener(v -> {
             EditText editEntrezNom = findViewById(R.id.editEntrezNom);
-            String nomUtilisateur = editEntrezNom.getText().toString();
+            String nomUtilisateur = editEntrezNom.getText().toString().trim();
             if (!nomUtilisateur.isEmpty()) {
-                Intent intent = new Intent(MainActivity.this, RejoindreJeu.class);
-                intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
-                startActivity(intent);
+                // Lancer l'activité pour rejoindre un jeu en passant le nom de l'utilisateur
+                lancerActiviteRejoindreJeu(nomUtilisateur);
             } else {
                 Toast.makeText(MainActivity.this, "Veuillez entrer un nom", Toast.LENGTH_SHORT).show();
             }
@@ -98,5 +85,24 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, APropos.class);
             startActivity(intent);
         });
+    }
+
+    // Méthode pour enregistrer le nom de l'utilisateur dans Firebase Database
+    private void enregistrerNomUtilisateur(String uid, String nomUtilisateur) {
+        mDatabase.child("users").child(uid).setValue(nomUtilisateur);
+    }
+
+    // Méthode pour lancer l'activité de création de jeu en passant le nom de l'utilisateur
+    private void lancerActiviteCreerJeu(String nomUtilisateur) {
+        Intent intent = new Intent(MainActivity.this, CreerJeu.class);
+        intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
+        startActivity(intent);
+    }
+
+    // Méthode pour lancer l'activité de rejoindre un jeu en passant le nom de l'utilisateur
+    private void lancerActiviteRejoindreJeu(String nomUtilisateur) {
+        Intent intent = new Intent(MainActivity.this, RejoindreJeu.class);
+        intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
+        startActivity(intent);
     }
 }
