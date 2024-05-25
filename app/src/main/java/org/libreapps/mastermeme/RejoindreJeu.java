@@ -20,12 +20,14 @@ public class RejoindreJeu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_jeu);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
+        View mainView = findViewById(R.id.main);
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-
+            return WindowInsetsCompat.CONSUMED;
         });
+
         Button buttonRejoindrePartie = findViewById(R.id.button_rejoindrepartie);
         buttonRejoindrePartie.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,38 +6,53 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-
+import java.util.Random;
 
 public class CreerJeu extends AppCompatActivity {
     private String codePartie;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creer_jeu);
+        setContentView(R.layout.activity_creer_jeu); // Charger le layout XML en premier
+
+        // Trouver et initialiser les éléments UI après avoir chargé le layout
+        TextView txtCodeCreer = findViewById(R.id.txtCodeCreer);
+
+        // Générer un code aléatoire à afficher dans txtCodeCreer
+        codePartie = generateUniqueCode();
+        txtCodeCreer.setText(codePartie); // Mettre à jour le TextView avec le code généré
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
+
         Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
         buttonCreerPartie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Générer un code de partie unique (vous pouvez utiliser une fonction pour cela)
+                // Générer un nouveau code de partie unique avant de créer la partie
                 codePartie = generateUniqueCode();
-                // Enregistrer le code de la partie dans SharedPreferences ou une base de données
-                saveCodePartie(codePartie);
-                // Rediriger vers l'activité principale du jeu
-                redirectToMainActivity();
+
+                // Mettre à jour le TextView avec le nouveau code généré
+                txtCodeCreer.setText(codePartie);
+
+                // Enregistrer le code de la partie dans SharedPreferences ou une base de données (non implémenté ici)
+
+                // Créer une intention pour ouvrir JeuPrincipal
+                Intent intent = new Intent(CreerJeu.this, JeuPrincipal.class);
+                intent.putExtra("CODE_PARTIE", codePartie);
+                startActivity(intent);
+                finish(); // Facultatif : pour fermer l'activité actuelle après la redirection
             }
         });
 
@@ -47,7 +62,6 @@ public class CreerJeu extends AppCompatActivity {
             public void onClick(View v) {
                 // Créer une intention pour revenir à MainActivity
                 Intent intent = new Intent(CreerJeu.this, MainActivity.class);
-                // Démarrer MainActivity
                 startActivity(intent);
             }
         });
@@ -58,9 +72,8 @@ public class CreerJeu extends AppCompatActivity {
         RadioButton radioButtonRd12 = findViewById(R.id.radioButtonRd12);
         RadioButton radioButtonRd18 = findViewById(R.id.radioButtonRd18);
 
-
-        /*
         // Ajouter un écouteur pour gérer la sélection des boutons radio
+        /*
         radioGroupRounds.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -78,23 +91,19 @@ public class CreerJeu extends AppCompatActivity {
                 }
             }
         });
-        */
 
+         */
     }
+
     private String generateUniqueCode() {
-        // Implémentez votre logique pour générer un code unique
-        // Par exemple, vous pouvez utiliser une combinaison aléatoire de chiffres et de lettres
-        return "ABC123"; // Code de test
+        // Générer un code aléatoire à 5 chiffres
+        Random random = new Random();
+        int code = random.nextInt(90000) + 10000; // pour assurer que le code a 5 chiffres
+
+        return String.valueOf(code);
     }
 
     private void saveCodePartie(String code) {
         // Utilisez SharedPreferences ou une base de données pour enregistrer le code de la partie
-    }
-
-    private void redirectToMainActivity() {
-        // Rediriger vers l'activité principale du jeu
-        Intent intent = new Intent(CreerJeu.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Facultatif : pour fermer l'activité actuelle après la redirection
     }
 }
