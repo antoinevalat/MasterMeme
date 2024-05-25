@@ -1,6 +1,8 @@
 package org.libreapps.mastermeme;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import org.libreapps.mastermeme.models.User;
@@ -39,6 +41,32 @@ public class MainActivity extends AppCompatActivity {
                 // Gestion des erreurs de la requête
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // Set up button listeners
+        Button buttonCreerJeu = findViewById(R.id.button_creerjeu);
+        Button buttonRejoindre = findViewById(R.id.button_rejoindre);
+        Button buttonRegles = findViewById(R.id.button_regles);
+        Button buttonAPropos = findViewById(R.id.button_apropos);
+
+        buttonCreerJeu.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CreerJeu.class);
+            startActivity(intent);
+        });
+
+        buttonRejoindre.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RejoindreJeu.class);
+            startActivity(intent);
+        });
+
+        buttonRegles.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ReglesJeu.class);
+            startActivity(intent);
+        });
+
+        buttonAPropos.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, APropos.class);
+            startActivity(intent);
         });
     }
 }
