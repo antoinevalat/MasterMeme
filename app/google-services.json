@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "736629448007",
+    "firebase_url": "https://meme-master-9bcda-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "meme-master-9bcda",
+    "storage_bucket": "meme-master-9bcda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736629448007:android:d86f95487ccd7514fd8062",
+        "android_client_info": {
+          "package_name": "org.libreapps.mastermeme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiP8pBdpFJ6uVJP3RCDNtqcZ-MsosXdjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

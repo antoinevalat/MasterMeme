@@ -45,11 +45,9 @@ public class JeuPrincipal extends AppCompatActivity {
         currentPlayerIndex = 0; // Le premier joueur (hors juge) est le premier de la liste
         players = new ArrayList<>();
         scores = new ArrayList<>();
+        String nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
 
-        // Initialiser la liste des joueurs (par exemple, 3 joueurs)
-        players.add("Joueur 1");
-        players.add("Joueur 2");
-        players.add("Joueur 3");
+
         for (int i = 0; i < players.size(); i++) {
             scores.add(0); // Initialiser les scores des joueurs à 0
         }

@@ -12,16 +12,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.util.Random;
 
 public class CreerJeu extends AppCompatActivity {
     private String codePartie;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creer_jeu); // Charger le layout XML en premier
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        String nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
 
         // Trouver et initialiser les éléments UI après avoir chargé le layout
         TextView txtCodeCreer = findViewById(R.id.txtCodeCreer);
@@ -46,11 +53,15 @@ public class CreerJeu extends AppCompatActivity {
                 // Mettre à jour le TextView avec le nouveau code généré
                 txtCodeCreer.setText(codePartie);
 
+                String codePartie = generateUniqueCode();
+                String userId = mAuth.getCurrentUser().getUid();
+                mDatabase.child("parties").child(codePartie).setValue(userId);
                 // Enregistrer le code de la partie dans SharedPreferences ou une base de données (non implémenté ici)
 
                 // Créer une intention pour ouvrir JeuPrincipal
-                Intent intent = new Intent(CreerJeu.this, JeuPrincipal.class);
+                Intent intent = new Intent(CreerJeu.this, ListeJoueurs.class);
                 intent.putExtra("CODE_PARTIE", codePartie);
+                intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
                 startActivity(intent);
                 finish(); // Facultatif : pour fermer l'activité actuelle après la redirection
             }

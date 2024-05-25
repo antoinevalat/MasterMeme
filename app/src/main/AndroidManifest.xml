@@ -30,6 +30,7 @@
         <activity android:name=".RejoindreJeu" android:exported="false"/>
         <activity android:name=".ReglesJeu" android:exported="false"/>
         <activity android:name=".JeuPrincipal" android:exported="false"/>
+        <activity android:name=".ListeJoueurs" android:exported="false"/>
     </application>
 
 </manifest>
