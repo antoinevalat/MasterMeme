@@ -50,8 +50,6 @@ public class CreerJeu extends AppCompatActivity {
 
         Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
         buttonCreerPartie.setOnClickListener(v -> {
-            codePartie = generateUniqueCode();
-            txtCodeCreer.setText(codePartie);
 
             String userId = mAuth.getCurrentUser().getUid();
             mDatabase.child("parties").child(codePartie).setValue(userId);
