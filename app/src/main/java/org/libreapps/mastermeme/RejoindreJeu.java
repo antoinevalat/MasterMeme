@@ -18,12 +18,16 @@ import com.google.firebase.database.ValueEventListener;
 
 public class RejoindreJeu extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    private String nomUtilisateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_jeu);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Récupérer le nom d'utilisateur de l'intent
+        nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
 
         Button buttonRejoindrePartie = findViewById(R.id.button_rejoindrepartie);
         buttonRejoindrePartie.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +74,7 @@ public class RejoindreJeu extends AppCompatActivity {
     private void redirectToListeJoueurs(String codePartie) {
         Intent intent = new Intent(RejoindreJeu.this, ListeJoueurs.class);
         intent.putExtra("CODE_PARTIE", codePartie);
+        intent.putExtra("NOM_UTILISATEUR", nomUtilisateur);
         startActivity(intent);
         finish();
     }
