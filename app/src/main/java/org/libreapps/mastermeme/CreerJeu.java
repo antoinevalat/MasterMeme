@@ -34,24 +34,20 @@ public class CreerJeu extends AppCompatActivity {
 
         codePartie = generateUniqueCode();
         txtCodeCreer.setText(codePartie);
-/*
+
         RadioGroup radioGroupRounds = findViewById(R.id.radioGroupRounds);
         radioGroupRounds.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.radioButtonRd6:
-                    selectedRoundCount = 6;
-                    break;
-                case R.id.radioButtonRd12:
-                    selectedRoundCount = 12;
-                    break;
-                case R.id.radioButtonRd18:
-                    selectedRoundCount = 18;
-                    break;
+            if (checkedId == R.id.radioButtonRd6) {
+                selectedRoundCount = 6;
+            } else if (checkedId == R.id.radioButtonRd12) {
+                selectedRoundCount = 12;
+            } else if (checkedId == R.id.radioButtonRd18) {
+                selectedRoundCount = 18;
             }
         });
 
 
- */
+
         Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
         buttonCreerPartie.setOnClickListener(v -> {
             codePartie = generateUniqueCode();

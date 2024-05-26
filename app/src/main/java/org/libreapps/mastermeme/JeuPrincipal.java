@@ -58,7 +58,7 @@ public class JeuPrincipal extends AppCompatActivity {
         nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
         userId = generateUserId();
 
-        roundCount = 5;
+        roundCount = getIntent().getIntExtra("ROUND_COUNT", 6); // Par défaut 6 rounds si non spécifié
         currentRound = 1;
         players = new ArrayList<>();
         scores = new ArrayList<>();
@@ -247,6 +247,7 @@ public class JeuPrincipal extends AppCompatActivity {
     }
 
 
+
     private String getRandomSituationDescription() {
         Random random = new Random();
         int index = random.nextInt(situationDescriptions.size());
@@ -286,6 +287,7 @@ public class JeuPrincipal extends AppCompatActivity {
         if (currentRound < roundCount) {
             currentRound++;
             mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+            startRound();
 
         } else {
             endGame();
@@ -293,7 +295,7 @@ public class JeuPrincipal extends AppCompatActivity {
     }
 
     private void endGame() {
-        // Implémentez la logique pour terminer le jeu ici
+        Toast.makeText(this, "Le jeu est terminé !", Toast.LENGTH_SHORT).show();
     }
 
     private void updateJudgeUI() {

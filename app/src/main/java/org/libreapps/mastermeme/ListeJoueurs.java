@@ -41,6 +41,8 @@ public class ListeJoueurs extends AppCompatActivity {
         listViewJoueurs.setAdapter(adapter);
 
         TextView txtCodePartie = findViewById(R.id.txtCodePartie);
+        TextView txtRoundCount = findViewById(R.id.txtRoundCount);
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -49,6 +51,7 @@ public class ListeJoueurs extends AppCompatActivity {
             roundCount = extras.getInt("ROUND_COUNT");
 
             txtCodePartie.setText(codePartie);
+            txtRoundCount.setText("Nombre de rounds : " + roundCount);
             ajouterJoueur(nomUtilisateur);
         }
 

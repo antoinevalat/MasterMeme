@@ -16,20 +16,27 @@
         android:layout_marginTop="100dp"
         android:text="A propos"
         android:textColor="#FFFFFFFF"
+        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtAPropos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="METTRE TEXTE"
+        android:layout_width="312dp"
+        android:layout_height="322dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:text="Bonjour, nous sommes trois élèves d’ingé 1, Noémie PERNIN, Antoine VALAT et Rayhane TIRYAKI. Nous avons choisi de recréer le jeu de société What do you meme en un jeu en ligne à notre facon. "
         android:textColor="#FFFFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitreAPropos" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitreAPropos"
+        app:layout_constraintVertical_bias="0.138" />
 
     <Button
         android:id="@+id/button_retour"
