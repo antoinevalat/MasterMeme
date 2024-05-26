@@ -18,7 +18,6 @@ public class APropos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apropos);
 
-        // Configuration de la gestion des insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -29,14 +28,11 @@ public class APropos extends AppCompatActivity {
         buttonRetour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Créer une intention pour revenir à MainActivity
                 Intent intent = new Intent(APropos.this, MainActivity.class);
-                // Démarrer MainActivity
                 startActivity(intent);
             }
         });
 
-        // Activer le mode Edge-to-Edge
         WindowInsetsControllerCompat windowInsetsController = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
         windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());

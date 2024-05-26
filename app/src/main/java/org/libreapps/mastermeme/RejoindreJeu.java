@@ -26,7 +26,6 @@ public class RejoindreJeu extends AppCompatActivity {
         setContentView(R.layout.activity_rejoindre_jeu);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Récupérer le nom d'utilisateur de l'intent
         nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
 
         Button buttonRejoindrePartie = findViewById(R.id.button_rejoindrepartie);
@@ -47,7 +46,6 @@ public class RejoindreJeu extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle error
                         }
                     });
                 } else {

@@ -25,9 +25,7 @@ public class ReglesJeu extends AppCompatActivity {
         buttonRetour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Créer une intention pour revenir à MainActivity
                 Intent intent = new Intent(ReglesJeu.this, MainActivity.class);
-                // Démarrer MainActivity
                 startActivity(intent);
             }
         });

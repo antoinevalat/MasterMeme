@@ -18,7 +18,7 @@ public class CreerJeu extends AppCompatActivity {
     private String codePartie;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    private int selectedRoundCount = 6; // Par défaut, 6 rounds
+    private int selectedRoundCount = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +50,10 @@ public class CreerJeu extends AppCompatActivity {
         buttonCreerPartie.setOnClickListener(v -> {
             String userId = mAuth.getCurrentUser().getUid();
 
-            // Initialiser les valeurs par défaut dans Firebase
             mDatabase.child("parties").child(codePartie).setValue(userId);
-            mDatabase.child("parties").child(codePartie).child("round").setValue(1); // Initialiser le round à 1
-            mDatabase.child("parties").child(codePartie).child("situationDescription").setValue("Début du jeu"); // Description par défaut
-            mDatabase.child("parties").child(codePartie).child("judgeIndex").setValue(0); // Index du juge par défaut
+            mDatabase.child("parties").child(codePartie).child("round").setValue(1);
+            mDatabase.child("parties").child(codePartie).child("situationDescription").setValue("Début du jeu");
+            mDatabase.child("parties").child(codePartie).child("judgeIndex").setValue(0);
 
             Intent intent = new Intent(CreerJeu.this, ListeJoueurs.class);
             intent.putExtra("CODE_PARTIE", codePartie);
