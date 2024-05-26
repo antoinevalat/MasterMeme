@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="org.libreapps.mastermeme" />
+                  <option name="mobileSdkAppId" value="1:736629448007:android:d86f95487ccd7514fd8062" />
+                  <option name="projectId" value="meme-master-9bcda" />
+                  <option name="projectNumber" value="736629448007" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

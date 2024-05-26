@@ -80,6 +80,12 @@ public class ListeJoueurs extends AppCompatActivity {
             intent.putExtra("ROUND_COUNT", roundCount);
             startActivity(intent);
         });
+
+        Button buttonRetour = findViewById(R.id.button_retour);
+        buttonRetour.setOnClickListener(v -> {
+            Intent intent = new Intent(ListeJoueurs.this, CreerJeu.class);
+            startActivity(intent);
+        });
     }
 
     private void ajouterJoueur(String nomUtilisateur) {
