@@ -1,35 +1,48 @@
 package org.libreapps.mastermeme;
 
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class JeuPrincipal extends AppCompatActivity {
 
-    private List<String> memesList; // Liste des chemins d'accès aux images des memes
-    private List<String> situationDescriptions; // Liste des descriptions de situations
-    private int roundCount; // Nombre de rounds de jeu
-    private int currentRound; // Round actuel
-    private int judgeIndex; // Index du joueur qui est le juge actuellement
-    private int currentPlayerIndex; // Index du joueur actuel (hors juge)
-    private List<String> players; // Liste des joueurs
-    private List<Integer> scores; // Scores des joueurs
-    private List<String> selectedMemes; // Liste des memes sélectionnés pour le round actuel
-    private List<Integer> selectedMemeIndexes; // Liste des indexes des memes sélectionnés
+    private List<String> memesList;
+    private List<String> situationDescriptions;
+    private int roundCount;
+    private int currentRound;
+    private int judgeIndex;
+    private List<String> players;
+    private List<Integer> scores;
+    private List<String> selectedMemes;
+    private List<Integer> selectedMemeIndexes;
 
-    private TextView txtSituationDescription; // TextView pour afficher la description de la situation
-    private ImageView[] memeImageViews; // Tableau pour afficher les memes
-    private Button[] memeSelectButtons; // Tableau pour les boutons de sélection des memes
-    private Button btnJudgeSelect; // Bouton pour que le juge sélectionne le meilleur mème
+    private TextView txtSituationDescription;
+    private ImageView[] memeImageViews;
+    private Button[] memeSelectButtons;
+    private Button btnJudgeSelect;
+
+    private DatabaseReference mDatabase;
+    private String codePartie;
+    private String nomUtilisateur;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +52,16 @@ public class JeuPrincipal extends AppCompatActivity {
         initializeMemesList();
         initializeSituationDescriptions();
 
-        roundCount = 5; // Nombre de rounds
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        codePartie = getIntent().getStringExtra("CODE_PARTIE");
+        nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
+        userId = generateUserId();
+
+        roundCount = 5;
         currentRound = 1;
-        judgeIndex = 0; // Le premier joueur est le juge
-        currentPlayerIndex = 0; // Le premier joueur (hors juge) est le premier de la liste
         players = new ArrayList<>();
         scores = new ArrayList<>();
-        String nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
-
-
-        for (int i = 0; i < players.size(); i++) {
-            scores.add(0); // Initialiser les scores des joueurs à 0
-        }
 
         txtSituationDescription = findViewById(R.id.txtSituationDescription);
 
@@ -68,46 +79,99 @@ public class JeuPrincipal extends AppCompatActivity {
 
         btnJudgeSelect = findViewById(R.id.btnJudgeSelect);
 
-        startRound();
+        // Ajouter l'utilisateur à la partie
+        mDatabase.child("parties").child(codePartie).child("joueurs").child(userId).setValue(nomUtilisateur);
 
-        Button btnNextRound = findViewById(R.id.btnNextRound);
-        btnNextRound.setOnClickListener(new View.OnClickListener() {
+        // Initialiser les données de la partie
+        mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+
+        mDatabase.child("parties").child(codePartie).child("joueurs").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                startNextRound();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
+                    players.add(playerSnapshot.getKey());
+                    scores.add(0);
+                }
+                startRound();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("JeuPrincipal", "loadPlayers:onCancelled", databaseError.toException());
             }
         });
 
-        btnJudgeSelect.setOnClickListener(new View.OnClickListener() {
+        btnJudgeSelect.setOnClickListener(v -> {
+            int bestMemeIndex = getBestMemeIndex();
+            String winnerId = selectedMemeIndexes.get(bestMemeIndex).toString();
+            int currentScore = scores.get(players.indexOf(winnerId));
+            mDatabase.child("parties").child(codePartie).child("scores").child(winnerId).setValue(currentScore + 1);
+            startNextRound();
+        });
+
+        Button btnNextRound = findViewById(R.id.btnNextRound);
+        btnNextRound.setOnClickListener(v -> startNextRound());
+
+        // Listener pour les changements de round
+        mDatabase.child("parties").child(codePartie).child("round").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                // Le juge sélectionne le meilleur meme (vous pouvez améliorer cette logique selon vos besoins)
-                int bestMemeIndex = getBestMemeIndex();
-                scores.set(judgeIndex, scores.get(judgeIndex) + 1); // Augmenter le score du juge pour l'instant
-                startNextRound();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentRound = dataSnapshot.getValue(Integer.class);
+                startRound();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("JeuPrincipal", "loadRound:onCancelled", databaseError.toException());
+            }
+        });
+
+        // Listener pour les changements de situation description
+        mDatabase.child("parties").child(codePartie).child("situationDescription").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String situationDescription = dataSnapshot.getValue(String.class);
+                txtSituationDescription.setText(situationDescription);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("JeuPrincipal", "loadDescription:onCancelled", databaseError.toException());
+            }
+        });
+
+        // Listener pour les changements de juge
+        mDatabase.child("parties").child(codePartie).child("judgeIndex").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                judgeIndex = dataSnapshot.getValue(Integer.class);
+                updateJudgeUI();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("JeuPrincipal", "loadJudge:onCancelled", databaseError.toException());
             }
         });
     }
 
     private void initializeMemesList() {
         memesList = new ArrayList<>();
-        // Ajoutez les ressources d'images des memes à la liste
         memesList.add(String.valueOf(R.drawable.meme1));
         memesList.add(String.valueOf(R.drawable.meme2));
         memesList.add(String.valueOf(R.drawable.meme3));
         memesList.add(String.valueOf(R.drawable.meme4));
-        // Ajoutez d'autres memes si nécessaire
     }
 
     private void initializeSituationDescriptions() {
         situationDescriptions = new ArrayList<>();
-        situationDescriptions.add("Quant tu ouvres une carte d'anniversaire de ta mamie et de l'argent en tombe");
+        situationDescriptions.add("Quand tu ouvres une carte d'anniversaire de ta mamie et de l'argent en tombe");
         situationDescriptions.add("Quand tu réalises que le son que tu sautes d'habitude est en fait un banger");
         situationDescriptions.add("Quand le cours est sur le point de se terminer et quelqu'un pose une question");
         situationDescriptions.add("Quand tu retournes ton oreiller sur le côté froid");
         situationDescriptions.add("Quand tu croyais avoir 4$ dans ton compte en banque mais que tu en as 30");
         situationDescriptions.add("Quand tu réalises que tu as oublié d'étudier pour l'examen demain matin.");
-        situationDescriptions.add("Quand c'est la 5ième fois qu'on te répète qqc et que tu fais semblant d'avoir compris");
+        situationDescriptions.add("Quand c'est la 5ème fois qu'on te répète qqc et que tu fais semblant d'avoir compris");
         situationDescriptions.add("Quand tu te réveilles et réalises que c'est encore le week-end.");
         situationDescriptions.add("Quand tu vois les prix des billets d'avion pour tes vacances");
         situationDescriptions.add("Quand tu cherches tes clés de voiture et que tu les trouves dans le frigo.");
@@ -115,9 +179,10 @@ public class JeuPrincipal extends AppCompatActivity {
 
     private void startRound() {
         String situationDescription = getRandomSituationDescription();
-        txtSituationDescription.setText(situationDescription);
+        mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
 
         selectRandomMemes();
+        selectRandomJudge();
         displaySelectedMemes();
     }
 
@@ -138,6 +203,12 @@ public class JeuPrincipal extends AppCompatActivity {
         }
     }
 
+    private void selectRandomJudge() {
+        Random random = new Random();
+        judgeIndex = random.nextInt(players.size());
+        mDatabase.child("parties").child(codePartie).child("judgeIndex").setValue(judgeIndex);
+    }
+
     private void displaySelectedMemes() {
         for (int i = 0; i < 4; i++) {
             int resId = Integer.parseInt(selectedMemes.get(i));
@@ -145,31 +216,30 @@ public class JeuPrincipal extends AppCompatActivity {
         }
     }
 
-    private void startNextRound() {
-        currentRound++;
-
-        if (currentRound <= roundCount) {
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-            if (currentPlayerIndex == judgeIndex) {
-                currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-            }
-            startRound();
-        } else {
-            displayFinalScores();
-        }
-    }
-
     private int getBestMemeIndex() {
-        // Logique pour sélectionner le meilleur meme (vous pouvez améliorer cette logique)
-        return 0; // Exemple : retourner l'index du premier meme
+        // Implémentez la logique pour obtenir l'index du meilleur meme ici
+        return 0;
     }
 
-    private void displayFinalScores() {
-        // Affichez les scores finaux des joueurs
-        StringBuilder finalScores = new StringBuilder("Scores finaux:\n");
-        for (int i = 0; i < players.size(); i++) {
-            finalScores.append(players.get(i)).append(": ").append(scores.get(i)).append("\n");
+    private void startNextRound() {
+        if (currentRound < roundCount) {
+            currentRound++;
+            mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+        } else {
+            endGame();
         }
-        txtSituationDescription.setText(finalScores.toString());
+    }
+
+    private void endGame() {
+        // Implémentez la logique pour terminer le jeu ici
+    }
+
+    private void updateJudgeUI() {
+        String judgeName = players.get(judgeIndex);
+        Toast.makeText(this, "Le juge de ce round est : " + judgeName, Toast.LENGTH_SHORT).show();
+    }
+
+    private String generateUserId() {
+        return UUID.randomUUID().toString();
     }
 }
