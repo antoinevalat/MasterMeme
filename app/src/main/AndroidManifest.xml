@@ -31,6 +31,10 @@
         <activity android:name=".ReglesJeu" android:exported="false"/>
         <activity android:name=".JeuPrincipal" android:exported="false"/>
         <activity android:name=".ListeJoueurs" android:exported="false"/>
+        <activity android:name=".JudgeActivity" />
+        <activity android:name=".GameOverActivity"/>
+
+
     </application>
 
 </manifest>

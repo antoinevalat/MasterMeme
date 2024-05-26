@@ -24,6 +24,8 @@ import java.util.UUID;
 
 public class JeuPrincipal extends AppCompatActivity {
 
+    private static final String TAG = "JeuPrincipal";
+
     private List<String> memesList;
     private List<String> situationDescriptions;
     private int roundCount;
@@ -49,110 +51,121 @@ public class JeuPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jeu_principal);
 
-        initializeMemesList();
-        initializeSituationDescriptions();
+        try {
+            initializeMemesList();
+            initializeSituationDescriptions();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        codePartie = getIntent().getStringExtra("CODE_PARTIE");
-        nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
-        userId = generateUserId();
+            codePartie = getIntent().getStringExtra("CODE_PARTIE");
+            nomUtilisateur = getIntent().getStringExtra("NOM_UTILISATEUR");
+            userId = generateUserId();
 
-        roundCount = getIntent().getIntExtra("ROUND_COUNT", 6); // Par défaut 6 rounds si non spécifié
-        currentRound = 1;
-        players = new ArrayList<>();
-        scores = new ArrayList<>();
+            roundCount = getIntent().getIntExtra("ROUND_COUNT", 6); // Par défaut 6 rounds si non spécifié
+            currentRound = 1;
+            players = new ArrayList<>();
+            scores = new ArrayList<>();
 
-        txtSituationDescription = findViewById(R.id.txtSituationDescription);
+            txtSituationDescription = findViewById(R.id.txtSituationDescription);
 
-        memeImageViews = new ImageView[4];
-        memeImageViews[0] = findViewById(R.id.imageView1);
-        memeImageViews[1] = findViewById(R.id.imageView2);
-        memeImageViews[2] = findViewById(R.id.imageView3);
-        memeImageViews[3] = findViewById(R.id.imageView4);
+            memeImageViews = new ImageView[4];
+            memeImageViews[0] = findViewById(R.id.imageView1);
+            memeImageViews[1] = findViewById(R.id.imageView2);
+            memeImageViews[2] = findViewById(R.id.imageView3);
+            memeImageViews[3] = findViewById(R.id.imageView4);
 
-        memeSelectButtons = new Button[4];
-        memeSelectButtons[0] = findViewById(R.id.btnSelectMeme1);
-        memeSelectButtons[1] = findViewById(R.id.btnSelectMeme2);
-        memeSelectButtons[2] = findViewById(R.id.btnSelectMeme3);
-        memeSelectButtons[3] = findViewById(R.id.btnSelectMeme4);
+            memeSelectButtons = new Button[4];
+            memeSelectButtons[0] = findViewById(R.id.btnSelectMeme1);
+            memeSelectButtons[1] = findViewById(R.id.btnSelectMeme2);
+            memeSelectButtons[2] = findViewById(R.id.btnSelectMeme3);
+            memeSelectButtons[3] = findViewById(R.id.btnSelectMeme4);
 
-        btnValider = findViewById(R.id.btnValider);
+            btnValider = findViewById(R.id.btnValider);
 
-        // Ajouter l'utilisateur à la partie
-        mDatabase.child("parties").child(codePartie).child("joueurs").child(userId).setValue(nomUtilisateur);
+            // Ajouter l'utilisateur à la partie
+            mDatabase.child("parties").child(codePartie).child("joueurs").child(userId).setValue(nomUtilisateur);
 
-        // Initialiser les données de la partie
-        mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+            // Initialiser les données de la partie
+            mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
 
-        mDatabase.child("parties").child(codePartie).child("joueurs").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                    players.add(playerSnapshot.getKey());
-                    scores.add(0);
+            mDatabase.child("parties").child(codePartie).child("joueurs").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
+                        players.add(playerSnapshot.getKey());
+                        scores.add(0);
+                    }
+                    startRound();
                 }
-                startRound();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w("JeuPrincipal", "loadPlayers:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "loadPlayers:onCancelled", databaseError.toException());
+                }
+            });
 
-        btnValider.setOnClickListener(v -> {
-            int bestMemeIndex = getBestMemeIndex();
-            String winnerId = selectedMemeIndexes.get(bestMemeIndex).toString();
-            int currentScore = scores.get(players.indexOf(winnerId));
-            mDatabase.child("parties").child(codePartie).child("scores").child(winnerId).setValue(currentScore + 1);
-            startNextRound();
-        });
+            btnValider.setOnClickListener(v -> {
+                try {
+                    int bestMemeIndex = getBestMemeIndex();
+                    String winnerId = selectedMemeIndexes.get(bestMemeIndex).toString();
+                    int currentScore = scores.get(players.indexOf(winnerId));
+                    mDatabase.child("parties").child(codePartie).child("scores").child(winnerId).setValue(currentScore + 1);
+                    startNextRound();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error in btnValider click listener: ", e);
+                }
+            });
 
-        Button btnNextRound = findViewById(R.id.btnNextRound);
-        btnNextRound.setOnClickListener(v -> startNextRound());
+            Button btnNextRound = findViewById(R.id.btnNextRound);
+            btnNextRound.setOnClickListener(v -> startNextRound());
 
-        // Listener pour les changements de round
-        mDatabase.child("parties").child(codePartie).child("round").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentRound = dataSnapshot.getValue(Integer.class);
-                startRound();
-            }
+            // Listener pour les changements de round
+            mDatabase.child("parties").child(codePartie).child("round").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentRound = dataSnapshot.getValue(Integer.class);
+                    startRound();
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w("JeuPrincipal", "loadRound:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "loadRound:onCancelled", databaseError.toException());
+                }
+            });
 
-        // Listener pour les changements de situation description
-        mDatabase.child("parties").child(codePartie).child("situationDescription").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String situationDescription = dataSnapshot.getValue(String.class);
-                txtSituationDescription.setText(situationDescription);
-            }
+            // Listener pour les changements de situation description
+            mDatabase.child("parties").child(codePartie).child("situationDescription").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String situationDescription = dataSnapshot.getValue(String.class);
+                    txtSituationDescription.setText(situationDescription);
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w("JeuPrincipal", "loadDescription:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "loadDescription:onCancelled", databaseError.toException());
+                }
+            });
 
-        // Listener pour les changements de juge
-        mDatabase.child("parties").child(codePartie).child("judgeIndex").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                judgeIndex = dataSnapshot.getValue(Integer.class);
-                updateJudgeUI();
-            }
+            // Listener pour les changements de juge
+            mDatabase.child("parties").child(codePartie).child("judgeIndex").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    judgeIndex = dataSnapshot.getValue(Integer.class);
+                    updateJudgeUI();
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w("JeuPrincipal", "loadJudge:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "loadJudge:onCancelled", databaseError.toException());
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreate: ", e);
+            Toast.makeText(this, "Une erreur est survenue. Veuillez réessayer.", Toast.LENGTH_SHORT).show();
+            finish(); // Fermer l'activité en cas d'erreur
+        }
     }
 
     private void initializeMemesList() {
@@ -170,7 +183,6 @@ public class JeuPrincipal extends AppCompatActivity {
         memesList.add(String.valueOf(R.drawable.meme11));
         memesList.add(String.valueOf(R.drawable.meme12));
         memesList.add(String.valueOf(R.drawable.meme13));
-
     }
 
     private void initializeSituationDescriptions() {
@@ -188,65 +200,67 @@ public class JeuPrincipal extends AppCompatActivity {
     }
 
     private void startRound() {
-        // Vérifiez si l'utilisateur est le juge
-        mDatabase.child("parties").child(codePartie).child("judgeIndex").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                judgeIndex = dataSnapshot.getValue(Integer.class);
-                if (userId.equals(players.get(judgeIndex))) {
-                    // Si l'utilisateur est le juge, affichez un message approprié
-                    Toast.makeText(getApplicationContext(), "Vous êtes le juge de ce round", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Sinon, affichez un message indiquant aux autres joueurs d'attendre
-                    Toast.makeText(getApplicationContext(), "Attendez que les autres joueurs fassent leur choix", Toast.LENGTH_SHORT).show();
-                }
+        try {
+            // Vérifiez si l'utilisateur est le juge
+            mDatabase.child("parties").child(codePartie).child("judgeIndex").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    judgeIndex = dataSnapshot.getValue(Integer.class);
+                    if (userId.equals(players.get(judgeIndex))) {
+                        // Si l'utilisateur est le juge, affichez un message approprié
+                        Toast.makeText(getApplicationContext(), "Vous êtes le juge de ce round", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Sinon, affichez un message indiquant aux autres joueurs d'attendre
+                        Toast.makeText(getApplicationContext(), "Attendez que les autres joueurs fassent leur choix", Toast.LENGTH_SHORT).show();
+                    }
 
-                // Récupérer et afficher la description de la situation aléatoire
-                String situationDescription = getRandomSituationDescription();
-                mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
+                    // Récupérer et afficher la description de la situation aléatoire
+                    String situationDescription = getRandomSituationDescription();
+                    mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
 
-                // Sélectionner les mèmes aléatoires pour ce tour
-                selectRandomMemes();
+                    // Sélectionner les mèmes aléatoires pour ce tour
+                    selectRandomMemes();
 
-                // Sélectionner aléatoirement le juge pour ce tour
-                selectRandomJudge();
+                    // Sélectionner aléatoirement le juge pour ce tour
+                    selectRandomJudge();
 
-                // Afficher les mèmes sélectionnés par les autres joueurs pour le juge
-                mDatabase.child("parties").child(codePartie).child("memes").child(String.valueOf(currentRound)).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        // Effacez les anciens mèmes sélectionnés, puis récupérez les nouveaux mèmes sélectionnés
-                        selectedMemes.clear();
-                        selectedMemeIndexes.clear();
+                    // Afficher les mèmes sélectionnés par les autres joueurs pour le juge
+                    mDatabase.child("parties").child(codePartie).child("memes").child(String.valueOf(currentRound)).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            // Effacez les anciens mèmes sélectionnés, puis récupérez les nouveaux mèmes sélectionnés
+                            selectedMemes.clear();
+                            selectedMemeIndexes.clear();
 
-                        // Parcourez les données pour obtenir les mèmes sélectionnés
-                        for (DataSnapshot memeSnapshot : dataSnapshot.getChildren()) {
-                            String memeIndex = memeSnapshot.getValue(String.class);
-                            selectedMemes.add(memeIndex);
-                            selectedMemeIndexes.add(Integer.parseInt(memeIndex));
+                            // Parcourez les données pour obtenir les mèmes sélectionnés
+                            for (DataSnapshot memeSnapshot : dataSnapshot.getChildren()) {
+                                String memeIndex = memeSnapshot.getValue(String.class);
+                                selectedMemes.add(memeIndex);
+                                selectedMemeIndexes.add(Integer.parseInt(memeIndex));
+                            }
+
+                            // Mettez à jour l'interface utilisateur du juge avec les nouveaux mèmes sélectionnés
+                            displaySelectedMemes();
                         }
 
-                        // Mettez à jour l'interface utilisateur du juge avec les nouveaux mèmes sélectionnés
-                        displaySelectedMemes();
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Gérez les erreurs de récupération des données depuis Firebase
+                            Log.w(TAG, "loadMemes:onCancelled", databaseError.toException());
+                        }
+                    });
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Gérez les erreurs de récupération des données depuis Firebase
-                        Log.w("JeuPrincipal", "loadMemes:onCancelled", databaseError.toException());
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Gérez les erreurs de récupération des données depuis Firebase
-                Log.w("JeuPrincipal", "loadJudge:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Gérez les erreurs de récupération des données depuis Firebase
+                    Log.w(TAG, "loadJudge:onCancelled", databaseError.toException());
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Error in startRound: ", e);
+        }
     }
-
-
 
     private String getRandomSituationDescription() {
         Random random = new Random();
@@ -284,13 +298,16 @@ public class JeuPrincipal extends AppCompatActivity {
     }
 
     private void startNextRound() {
-        if (currentRound < roundCount) {
-            currentRound++;
-            mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
-            startRound();
-
-        } else {
-            endGame();
+        try {
+            if (currentRound < roundCount) {
+                currentRound++;
+                mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+                startRound();
+            } else {
+                endGame();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error in startNextRound: ", e);
         }
     }
 
