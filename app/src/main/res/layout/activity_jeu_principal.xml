@@ -121,10 +121,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnJudgeSelect"
+        android:id="@+id/btnValider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Le Juge Sélectionne"/>
+        android:text="Valider ma réponse"/>
 
     <Button
         android:id="@+id/btnNextRound"

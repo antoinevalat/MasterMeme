@@ -37,7 +37,7 @@ public class JeuPrincipal extends AppCompatActivity {
     private TextView txtSituationDescription;
     private ImageView[] memeImageViews;
     private Button[] memeSelectButtons;
-    private Button btnJudgeSelect;
+    private Button btnValider;
 
     private DatabaseReference mDatabase;
     private String codePartie;
@@ -77,7 +77,7 @@ public class JeuPrincipal extends AppCompatActivity {
         memeSelectButtons[2] = findViewById(R.id.btnSelectMeme3);
         memeSelectButtons[3] = findViewById(R.id.btnSelectMeme4);
 
-        btnJudgeSelect = findViewById(R.id.btnJudgeSelect);
+        btnValider = findViewById(R.id.btnValider);
 
         // Ajouter l'utilisateur à la partie
         mDatabase.child("parties").child(codePartie).child("joueurs").child(userId).setValue(nomUtilisateur);
@@ -101,7 +101,7 @@ public class JeuPrincipal extends AppCompatActivity {
             }
         });
 
-        btnJudgeSelect.setOnClickListener(v -> {
+        btnValider.setOnClickListener(v -> {
             int bestMemeIndex = getBestMemeIndex();
             String winnerId = selectedMemeIndexes.get(bestMemeIndex).toString();
             int currentScore = scores.get(players.indexOf(winnerId));
@@ -161,6 +161,16 @@ public class JeuPrincipal extends AppCompatActivity {
         memesList.add(String.valueOf(R.drawable.meme2));
         memesList.add(String.valueOf(R.drawable.meme3));
         memesList.add(String.valueOf(R.drawable.meme4));
+        memesList.add(String.valueOf(R.drawable.meme5));
+        memesList.add(String.valueOf(R.drawable.meme6));
+        memesList.add(String.valueOf(R.drawable.meme7));
+        memesList.add(String.valueOf(R.drawable.meme8));
+        memesList.add(String.valueOf(R.drawable.meme9));
+        memesList.add(String.valueOf(R.drawable.meme10));
+        memesList.add(String.valueOf(R.drawable.meme11));
+        memesList.add(String.valueOf(R.drawable.meme12));
+        memesList.add(String.valueOf(R.drawable.meme13));
+
     }
 
     private void initializeSituationDescriptions() {
@@ -178,13 +188,64 @@ public class JeuPrincipal extends AppCompatActivity {
     }
 
     private void startRound() {
-        String situationDescription = getRandomSituationDescription();
-        mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
+        // Vérifiez si l'utilisateur est le juge
+        mDatabase.child("parties").child(codePartie).child("judgeIndex").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                judgeIndex = dataSnapshot.getValue(Integer.class);
+                if (userId.equals(players.get(judgeIndex))) {
+                    // Si l'utilisateur est le juge, affichez un message approprié
+                    Toast.makeText(getApplicationContext(), "Vous êtes le juge de ce round", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Sinon, affichez un message indiquant aux autres joueurs d'attendre
+                    Toast.makeText(getApplicationContext(), "Attendez que les autres joueurs fassent leur choix", Toast.LENGTH_SHORT).show();
+                }
 
-        selectRandomMemes();
-        selectRandomJudge();
-        displaySelectedMemes();
+                // Récupérer et afficher la description de la situation aléatoire
+                String situationDescription = getRandomSituationDescription();
+                mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
+
+                // Sélectionner les mèmes aléatoires pour ce tour
+                selectRandomMemes();
+
+                // Sélectionner aléatoirement le juge pour ce tour
+                selectRandomJudge();
+
+                // Afficher les mèmes sélectionnés par les autres joueurs pour le juge
+                mDatabase.child("parties").child(codePartie).child("memes").child(String.valueOf(currentRound)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // Effacez les anciens mèmes sélectionnés, puis récupérez les nouveaux mèmes sélectionnés
+                        selectedMemes.clear();
+                        selectedMemeIndexes.clear();
+
+                        // Parcourez les données pour obtenir les mèmes sélectionnés
+                        for (DataSnapshot memeSnapshot : dataSnapshot.getChildren()) {
+                            String memeIndex = memeSnapshot.getValue(String.class);
+                            selectedMemes.add(memeIndex);
+                            selectedMemeIndexes.add(Integer.parseInt(memeIndex));
+                        }
+
+                        // Mettez à jour l'interface utilisateur du juge avec les nouveaux mèmes sélectionnés
+                        displaySelectedMemes();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Gérez les erreurs de récupération des données depuis Firebase
+                        Log.w("JeuPrincipal", "loadMemes:onCancelled", databaseError.toException());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Gérez les erreurs de récupération des données depuis Firebase
+                Log.w("JeuPrincipal", "loadJudge:onCancelled", databaseError.toException());
+            }
+        });
     }
+
 
     private String getRandomSituationDescription() {
         Random random = new Random();
@@ -225,6 +286,7 @@ public class JeuPrincipal extends AppCompatActivity {
         if (currentRound < roundCount) {
             currentRound++;
             mDatabase.child("parties").child(codePartie).child("round").setValue(currentRound);
+
         } else {
             endGame();
         }
