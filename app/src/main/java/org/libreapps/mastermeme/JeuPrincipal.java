@@ -30,7 +30,7 @@ public class JeuPrincipal extends AppCompatActivity {
     private List<String> situationDescriptions;
     private int roundCount;
     private int currentRound;
-    private int judgeIndex;
+    private Integer judgeIndex;
     private List<String> players;
     private List<Integer> scores;
     private List<String> selectedMemes;
@@ -123,8 +123,14 @@ public class JeuPrincipal extends AppCompatActivity {
             mDatabase.child("parties").child(codePartie).child("round").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    currentRound = dataSnapshot.getValue(Integer.class);
-                    startRound();
+                    Integer roundValue = dataSnapshot.getValue(Integer.class);
+                    if (roundValue != null) {
+                        currentRound = roundValue;
+                        startRound();
+                    } else {
+                        Log.w(TAG, "roundValue is null");
+                        Toast.makeText(JeuPrincipal.this, "Erreur : round est nul", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -151,8 +157,14 @@ public class JeuPrincipal extends AppCompatActivity {
             mDatabase.child("parties").child(codePartie).child("judgeIndex").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    judgeIndex = dataSnapshot.getValue(Integer.class);
-                    updateJudgeUI();
+                    Integer judgeValue = dataSnapshot.getValue(Integer.class);
+                    if (judgeValue != null) {
+                        judgeIndex = judgeValue;
+                        updateJudgeUI();
+                    } else {
+                        Log.w(TAG, "judgeValue is null");
+                        Toast.makeText(JeuPrincipal.this, "Erreur : judgeIndex est nul", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -206,49 +218,51 @@ public class JeuPrincipal extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     judgeIndex = dataSnapshot.getValue(Integer.class);
-                    if (userId.equals(players.get(judgeIndex))) {
-                        // Si l'utilisateur est le juge, affichez un message approprié
-                        Toast.makeText(getApplicationContext(), "Vous êtes le juge de ce round", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Sinon, affichez un message indiquant aux autres joueurs d'attendre
-                        Toast.makeText(getApplicationContext(), "Attendez que les autres joueurs fassent leur choix", Toast.LENGTH_SHORT).show();
-                    }
+                    if (judgeIndex != null && judgeIndex >= 0 && judgeIndex < players.size()) {
+                        if (userId.equals(players.get(judgeIndex))) {
+                            // Si l'utilisateur est le juge, affichez un message approprié
+                            Toast.makeText(getApplicationContext(), "Vous êtes le juge de ce round", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Sinon, affichez un message indiquant aux autres joueurs d'attendre
+                            Toast.makeText(getApplicationContext(), "Attendez que les autres joueurs fassent leur choix", Toast.LENGTH_SHORT).show();
+                        }
 
-                    // Récupérer et afficher la description de la situation aléatoire
-                    String situationDescription = getRandomSituationDescription();
-                    mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
+                        // Récupérer et afficher la description de la situation aléatoire
+                        String situationDescription = getRandomSituationDescription();
+                        mDatabase.child("parties").child(codePartie).child("situationDescription").setValue(situationDescription);
 
-                    // Sélectionner les mèmes aléatoires pour ce tour
-                    selectRandomMemes();
+                        // Sélectionner les mèmes aléatoires pour ce tour
+                        selectRandomMemes();
 
-                    // Sélectionner aléatoirement le juge pour ce tour
-                    selectRandomJudge();
+                        // Afficher les mèmes sélectionnés par les autres joueurs pour le juge
+                        mDatabase.child("parties").child(codePartie).child("memes").child(String.valueOf(currentRound)).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                // Effacez les anciens mèmes sélectionnés, puis récupérez les nouveaux mèmes sélectionnés
+                                selectedMemes.clear();
+                                selectedMemeIndexes.clear();
 
-                    // Afficher les mèmes sélectionnés par les autres joueurs pour le juge
-                    mDatabase.child("parties").child(codePartie).child("memes").child(String.valueOf(currentRound)).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            // Effacez les anciens mèmes sélectionnés, puis récupérez les nouveaux mèmes sélectionnés
-                            selectedMemes.clear();
-                            selectedMemeIndexes.clear();
+                                // Parcourez les données pour obtenir les mèmes sélectionnés
+                                for (DataSnapshot memeSnapshot : dataSnapshot.getChildren()) {
+                                    String memeIndex = memeSnapshot.getValue(String.class);
+                                    selectedMemes.add(memeIndex);
+                                    selectedMemeIndexes.add(Integer.parseInt(memeIndex));
+                                }
 
-                            // Parcourez les données pour obtenir les mèmes sélectionnés
-                            for (DataSnapshot memeSnapshot : dataSnapshot.getChildren()) {
-                                String memeIndex = memeSnapshot.getValue(String.class);
-                                selectedMemes.add(memeIndex);
-                                selectedMemeIndexes.add(Integer.parseInt(memeIndex));
+                                // Mettez à jour l'interface utilisateur du juge avec les nouveaux mèmes sélectionnés
+                                displaySelectedMemes();
                             }
 
-                            // Mettez à jour l'interface utilisateur du juge avec les nouveaux mèmes sélectionnés
-                            displaySelectedMemes();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Gérez les erreurs de récupération des données depuis Firebase
-                            Log.w(TAG, "loadMemes:onCancelled", databaseError.toException());
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                // Gérez les erreurs de récupération des données depuis Firebase
+                                Log.w(TAG, "loadMemes:onCancelled", databaseError.toException());
+                            }
+                        });
+                    } else {
+                        Log.w(TAG, "judgeIndex is invalid");
+                        Toast.makeText(JeuPrincipal.this, "Erreur : judgeIndex est invalide", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -277,12 +291,6 @@ public class JeuPrincipal extends AppCompatActivity {
             selectedMemes.add(memesList.get(i));
             selectedMemeIndexes.add(i);
         }
-    }
-
-    private void selectRandomJudge() {
-        Random random = new Random();
-        judgeIndex = random.nextInt(players.size());
-        mDatabase.child("parties").child(codePartie).child("judgeIndex").setValue(judgeIndex);
     }
 
     private void displaySelectedMemes() {

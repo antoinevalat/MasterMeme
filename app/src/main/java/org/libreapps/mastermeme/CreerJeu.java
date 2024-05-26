@@ -46,13 +46,15 @@ public class CreerJeu extends AppCompatActivity {
             }
         });
 
-
-
         Button buttonCreerPartie = findViewById(R.id.button_creerpartie);
         buttonCreerPartie.setOnClickListener(v -> {
-
             String userId = mAuth.getCurrentUser().getUid();
+
+            // Initialiser les valeurs par défaut dans Firebase
             mDatabase.child("parties").child(codePartie).setValue(userId);
+            mDatabase.child("parties").child(codePartie).child("round").setValue(1); // Initialiser le round à 1
+            mDatabase.child("parties").child(codePartie).child("situationDescription").setValue("Début du jeu"); // Description par défaut
+            mDatabase.child("parties").child(codePartie).child("judgeIndex").setValue(0); // Index du juge par défaut
 
             Intent intent = new Intent(CreerJeu.this, ListeJoueurs.class);
             intent.putExtra("CODE_PARTIE", codePartie);
